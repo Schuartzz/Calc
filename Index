@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Rendimento Composto</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            color: white;
+            width: 300px; /* Define a largura da calculadora */
+        }
+        .container h1 {
+            margin-bottom: 20px;
+        }
+        .container input {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold; /* Deixa o valor digitado em negrito */
+        }
+        .container button {
+            width: calc(50% - 10px);
+            padding: 10px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .container button.calcular {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .container button.calcular:hover {
+            background-color: #45a049;
+        }
+        .container button.limpar {
+            background-color: #f44336;
+            color: white;
+        }
+        .container button.limpar:hover {
+            background-color: #e53935;
+        }
+        .container .resultado {
+            margin-top: 20px;
+            background-color: white;
+            color: black;
+            padding: 10px;
+            border-radius: 5px;
+            height: 548px; /* Aumenta a altura da tabela de resultados em mais 3% */
+            overflow: auto; /* Adiciona rolagem se o conteúdo exceder a altura */
+        }
+        .container .erro {
+            color: red;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid white; /* Deixa as linhas da tabela visíveis */
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .footer {
+            margin-top: 20px;
+            color: white;
+            font-size: 14px;
+        }
+        .footer a {
+            color: white; /* Deixa o link na cor branca */
+        }
+    </style>
+</head>
+<body onload="document.getElementById('valor_inicial').focus();">
+    <div class="container">
+        <h1>Calculadora de Rendimento Composto</h1>
+        <form id="calculadoraForm" onsubmit="event.preventDefault(); calcularRendimento();">
+            <label for="valor_inicial">Valor Inicial (R$):</label>
+            <input type="text" id="valor_inicial" name="valor_inicial" required>
+            <br>
+            <button type="button" class="calcular" onclick="calcularRendimento()">Calcular</button>
+            <button type="button" class="limpar" onclick="limparCampos()">Limpar</button>
+        </form>
+        <div id="resultado" class="resultado"></div>
+        <div class="footer">
+            Criado por Raphael:<br>
+            <a href="https://www.instagram.com/schuartzz" target="_blank">Instagram</a>
+        </div>
+    </div>
+
+    <script>
+        function calcularRendimento() {
+            const valorInicial = parseFloat(document.getElementById('valor_inicial').value);
+
+            if (isNaN(valorInicial)) {
+                document.getElementById('resultado').innerHTML = '<div class="erro">Por favor, insira um valor numérico válido.</div>';
+                return;
+            }
+
+            let resultadoHTML = '<table><tr><th>Mês</th><th>Valor (R$)</th></tr>';
+            let valor = valorInicial;
+            for (let mes = 1; mes <= 12; mes++) {
+                valor *= 1.011375;
+                resultadoHTML += `<tr><td>${mes}</td><td>${valor.toFixed(2)}</td></tr>`;
+            }
+            resultadoHTML += '</table>';
+            document.getElementById('resultado').innerHTML = resultadoHTML;
+        }
+
+        function limparCampos() {
+            document.getElementById('valor_inicial').value = '';
+            document.getElementById('resultado').innerHTML = '';
+        }
+
+        document.getElementById('valor_inicial').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                calcularRendimento();
+            }
+        });
+    </script>
+</body>
+</html>
